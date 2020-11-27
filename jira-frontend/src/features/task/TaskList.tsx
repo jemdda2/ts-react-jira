@@ -203,6 +203,31 @@ const TaskList: React.FC = () => {
 										src={conditionalSrc(row["responsible"])}
 									/>
 								</TableListCell>
+								<TableListCell>
+									<Avatar 
+										className={classes.small}
+										alt="owner"
+										src={conditionalSrc(row["owner"])}
+									/>
+								</TableListCell>
+
+								<TableCell align="center">
+									<TaskListIcon
+										onClick={() => {
+											dispatch(fetchAsyncDeleteTask(row.id));
+										}}
+										disabled={row["owner"] !== loginUser.id}
+									>
+										<DeleteOutlineOutlinedIcon />
+									</TaskListIcon>
+									<TaskListIcon
+										onClick={() => dispatch(editTask(row))}
+										disabled={row["owner"] !== loginUser.id}
+									>
+										<EditOutlinedIcon />
+									</TaskListIcon>
+								</TableCell>
+
 							</TableRow>
 						))}
 					</TableBody>
@@ -214,7 +239,7 @@ const TaskList: React.FC = () => {
 
 export default TaskList
 
-const TaskListIcon = styled.div`
+const TaskListIcon = styled.button`
 	cursor: pointer;
 	background-color: transparent;
 	border: none;
@@ -222,6 +247,10 @@ const TaskListIcon = styled.div`
 	font-size: 20px;
 	margin-top: 10px;
 	color: dimgray;
+	&:disabled {
+		color: #ccc;
+		cursor: none;
+	}
 `;
 
 const TableListCell = styled(TableCell)`

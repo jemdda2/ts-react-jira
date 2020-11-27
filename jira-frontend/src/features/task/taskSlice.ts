@@ -65,7 +65,7 @@ export const fetchAsyncCreateTask = createAsyncThunk(
 	"task/createTask",
 	async (task: POST_TASK) => {
 		const res = await axios.post<READ_TASK>(
-			`${process.env.REACT_APP_API_URL}/api/tasks`,
+			`${process.env.REACT_APP_API_URL}/api/tasks/`,
 			task,
 			{
 				headers: {
@@ -86,9 +86,9 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
 			task,
 			{
 				headers: {
-					"Content=type": "application/json",
-					Authorization: `JWT ${localStorage.localJWT}`,
-				},
+          "Content-Type": "application/json",
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
 			}
 		);
 		return res.data;
@@ -223,19 +223,19 @@ export const taskSlice = createSlice({
 		builder.addCase(fetchAsyncCreateCategory.rejected, () => {
 			window.location.href = "/";
 		});
-		builder.addCase(
-			fetchAsyncCreateTask.fulfilled,
-			(state, action: PayloadAction<READ_TASK>) => {
-				return {
-					...state,
-					tasks: [action.payload, ...state.tasks],
-					editedTask: initialState.editedTask,
-				};
-			}
-		);
-		builder.addCase(fetchAsyncCreateTask.rejected, () => {
-			window.location.href = "/";
-		});
+    builder.addCase(
+      fetchAsyncCreateTask.fulfilled,
+      (state, action: PayloadAction<READ_TASK>) => {
+        return {
+          ...state,
+          tasks: [action.payload, ...state.tasks],
+          editedTask: initialState.editedTask,
+        };
+      }
+    );
+    builder.addCase(fetchAsyncCreateTask.rejected, () => {
+      window.location.href = "/";
+    });
 		builder.addCase(
 			fetchAsyncUpdateTask.fulfilled,
 			(state, action: PayloadAction<READ_TASK>) => {
